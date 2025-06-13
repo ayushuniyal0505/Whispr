@@ -10,7 +10,6 @@ const Sidebar = () => {
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   useEffect(() => {
@@ -30,57 +29,35 @@ const Sidebar = () => {
     <aside className="h-full w-20 lg:w-80 border-r border-base-300 flex flex-col transition-all duration-200 bg-base-100">
       {/* Header section */}
       <div className="border-b border-base-300 w-full p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Users className="size-5 lg:size-6" />
-            <span className="font-medium hidden lg:block text-lg">Contacts</span>
-          </div>
-          
-          {/* Mobile search toggle */}
-          <button 
-            className="lg:hidden p-1 rounded-full hover:bg-base-300 transition-colors"
-            onClick={() => setIsSearchFocused(!isSearchFocused)}
-          >
-            <Search className="size-5" />
-          </button>
+        <div className="flex items-center gap-2">
+          <Users className="size-5 lg:size-6" />
+          <span className="font-medium hidden lg:block text-lg">Contacts</span>
         </div>
 
-        {/* Search input - always visible on desktop, conditionally on mobile */}
-        <AnimatePresence>
-          {(isSearchFocused || !isSearchFocused) && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className={`mt-3 ${isSearchFocused ? "block" : "hidden lg:block"}`}
-            >
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
-                <input
-                  type="text"
-                  placeholder="Search contacts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
-                  className="w-full pl-9 pr-8 py-2 text-sm bg-base-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-base-300 transition-colors"
-                  >
-                    <X className="size-4 text-zinc-400" />
-                  </button>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Search input - only visible on desktop */}
+        <div className="mt-3 hidden lg:block">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+            <input
+              type="text"
+              placeholder="Search contacts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 text-sm bg-base-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-base-300 transition-colors"
+              >
+                <X className="size-4 text-zinc-400" />
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Filters section */}
-        <div className="mt-3">
+        <div className="mt-3 hidden lg:block">
           <button 
             className="flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
